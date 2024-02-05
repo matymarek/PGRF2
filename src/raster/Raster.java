@@ -1,17 +1,22 @@
 package raster;
 
-public interface Raster {
+public interface Raster<T> {
 
     void clear();
 
-    void setClearColor(int color);
+    void setDefaultValue(T value);
 
     int getWidth();
 
     int getHeight();
 
-    int getPixel(int x, int y);
+    T getValue(int x, int y);
 
-    void setPixel(int x, int y, int color);
+    void setValue(int x, int y, T color);
+
+    default boolean isInRaster(int x, int y){
+        //TODO: implement
+        return true;
+    }
 
 }
