@@ -1,6 +1,8 @@
 package control;
 
 import raster.Raster;
+import raster.TriangleRasterizer;
+import raster.ZBuffer;
 import transforms.Col;
 import view.Panel;
 
@@ -8,6 +10,9 @@ import java.awt.event.*;
 
 public class Controller3D implements Controller {
     private final Panel panel;
+    private ZBuffer zBuffer;
+    private TriangleRasterizer triangleRasterizer;
+
 
     public Controller3D(Panel panel) {
         this.panel = panel;
@@ -18,6 +23,9 @@ public class Controller3D implements Controller {
 
     public void initObjects(Raster<Col> raster) {
         raster.setDefaultValue(new Col(0x101010));
+        zBuffer = new ZBuffer(raster);
+        triangleRasterizer = new TriangleRasterizer(zBuffer);
+
     }
 
     @Override
@@ -33,9 +41,12 @@ public class Controller3D implements Controller {
 
     private void redraw() {
         panel.clear();
-
-        panel.getRaster().setValue(panel.getWidth() / 2, panel.getHeight() / 2, new Col(0xff0000));
-
+        triangleRasterizer.rasterize(
+                400, 0, 0.5,
+                0,300, 0.5,
+                799, 599, 0.5,
+                new Col(0xff0000)
+        );
         panel.repaint();
     }
 }

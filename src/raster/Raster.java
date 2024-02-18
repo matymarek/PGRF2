@@ -15,8 +15,7 @@ public interface Raster<T> {
     void setValue(int x, int y, T color);
 
     default boolean isInRaster(int x, int y){
-        //TODO: implement
-        return true;
+        return x < getWidth() && y < getHeight();
     }
 
 }

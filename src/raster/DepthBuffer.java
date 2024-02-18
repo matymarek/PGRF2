@@ -4,7 +4,7 @@ public class DepthBuffer implements Raster<Double>{
 
     private final double[][] buffer;
     private final int width, height;
-    private double defaultValue;
+    private final double defaultValue;
 
     public DepthBuffer(int width, int height) {
         this.width = width;
