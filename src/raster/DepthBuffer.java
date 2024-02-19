@@ -23,9 +23,7 @@ public class DepthBuffer implements Raster<Double>{
     }
 
     @Override
-    public void setDefaultValue(Double value) {
-
-    }
+    public void setDefaultValue(Double value) {}
 
     @Override
     public int getWidth() {

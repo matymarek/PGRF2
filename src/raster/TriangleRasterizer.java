@@ -1,5 +1,6 @@
 package raster;
 
+import solid.Vertex;
 import transforms.Col;
 
 public class TriangleRasterizer {
@@ -9,30 +10,45 @@ public class TriangleRasterizer {
         this.zBuffer = zBuffer;
     }
 
-    public void rasterize(
-            int aX, int aY, double aZ,
-            int bX, int bY, double bZ,
-            int cX, int cY, double cZ,
-            Col color
-    ) {
+    public void rasterize(Vertex a, Vertex b, Vertex c, Col color){
+        int aX = (int) a.getPos().getX();
+        int aY = (int) a.getPos().getY();
+        double aZ = (int) a.getPos().getZ();
+        int bX = (int) b.getPos().getX();
+        int bY = (int) b.getPos().getY();
+        double bZ = (int) b.getPos().getZ();
+        int cX = (int) c.getPos().getX();
+        int cY = (int) c.getPos().getY();
+        double cZ = (int) c.getPos().getZ();
 
-        // TODO: seřadit vrcholy podle y
+        if (aY > bY){
+            double temp = aY; aY = bY; bY = (int) temp;
+            temp = aX; aX = bX; bX = (int) temp;
+            temp = aZ; aZ = bZ; bZ = temp;
+        }
+        if (bY > cY){
+            double temp = bY; bY = cY; cY = (int) temp;
+            temp = bX; bX = cX; cX = (int) temp;
+            temp = bZ; bZ = cZ; cZ = temp;
+        }
 
         for (int y = aY; y <= bY; y++) {
-            // odečtu minumum, dělím rozsahem
+
             double tAB = (y - aY) / (double) (bY - aY);
             int xAB = (int) Math.round((1 - tAB) * aX + tAB * bX);
             color.mul(1 - tAB).add(color.mul(tAB));
-            // TODO: zAB
+            int zAB = (int) Math.round((1 - tAB) * aZ + tAB * bZ);
 
             double tAC = (y - aY) / (double) (cY - aY);
             int xAC = (int) Math.round((1 - tAC) * aX + tAC * cX);
-            // TODO: zAC
+            color.mul(1 - tAC).add(color.mul(tAC));
+            int zAC = (int) Math.round((1 - tAC) * aZ + tAC * cZ);
 
             // TODO: x1 < x2????
+
             for (int x = xAB; x <= xAC; x++) {
-                // TODO: tZ
-                // TODO: final z
+                double tZ = (x - xAB) / (double) (xAC - xAB);
+                double z = (1 - tZ) * zAB + tZ * zAC;
                 zBuffer.setPixelWithZTest(x, y, 0.2, color);
             }
 

@@ -3,7 +3,9 @@ package control;
 import raster.Raster;
 import raster.TriangleRasterizer;
 import raster.ZBuffer;
+import solid.Vertex;
 import transforms.Col;
+import transforms.Point3D;
 import view.Panel;
 
 import java.awt.event.*;
@@ -42,11 +44,19 @@ public class Controller3D implements Controller {
     private void redraw() {
         panel.clear();
         triangleRasterizer.rasterize(
-                400, 0, 0.5,
-                0,300, 0.5,
-                799, 599, 0.5,
+                new Vertex(new Point3D(400, 0, 0.5), new Col(0xff0000)),
+                new Vertex(new Point3D(0,300, 0.5), new Col(0xff0000)),
+                new Vertex(new Point3D(799, 599, 0.5), new Col(0xff0000)),
                 new Col(0xff0000)
         );
+
+        triangleRasterizer.rasterize(
+                new Vertex(new Point3D(500, 0, 0.3), new Col(0xff0000)),
+                new Vertex(new Point3D(0,350, 0.7), new Col(0xff0000)),
+                new Vertex(new Point3D(400, 599, 0.7), new Col(0xff0000)),
+                new Col(0xff0000)
+        );
+
         panel.repaint();
     }
 }
