@@ -13,13 +13,13 @@ public class TriangleRasterizer {
     public void rasterize(Vertex a, Vertex b, Vertex c, Col color){
         int aX = (int) a.getPos().getX();
         int aY = (int) a.getPos().getY();
-        double aZ = (int) a.getPos().getZ();
+        double aZ = a.getPos().getZ();
         int bX = (int) b.getPos().getX();
         int bY = (int) b.getPos().getY();
-        double bZ = (int) b.getPos().getZ();
+        double bZ = b.getPos().getZ();
         int cX = (int) c.getPos().getX();
         int cY = (int) c.getPos().getY();
-        double cZ = (int) c.getPos().getZ();
+        double cZ = c.getPos().getZ();
 
         if (aY > bY){
             double temp = aY; aY = bY; bY = (int) temp;
