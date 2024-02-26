@@ -10,4 +10,16 @@ public class Part {
         this.start = start;
         this.count = count;
     }
+
+    public TopologyType getType() {
+        return type;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getCount() {
+        return count;
+    }
 }

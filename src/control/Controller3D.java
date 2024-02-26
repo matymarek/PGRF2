@@ -3,6 +3,8 @@ package control;
 import raster.Raster;
 import raster.TriangleRasterizer;
 import raster.ZBuffer;
+import render.Renderer;
+import solid.Arrow;
 import solid.Vertex;
 import transforms.Col;
 import transforms.Point3D;
@@ -14,6 +16,8 @@ public class Controller3D implements Controller {
     private final Panel panel;
     private ZBuffer zBuffer;
     private TriangleRasterizer triangleRasterizer;
+
+    private Renderer renderer;
 
 
     public Controller3D(Panel panel) {
@@ -27,7 +31,7 @@ public class Controller3D implements Controller {
         raster.setDefaultValue(new Col(0x101010));
         zBuffer = new ZBuffer(raster);
         triangleRasterizer = new TriangleRasterizer(zBuffer);
-
+        renderer = new Renderer(triangleRasterizer);
     }
 
     @Override
@@ -57,6 +61,7 @@ public class Controller3D implements Controller {
                 new Col(0xff0000)
         );
 
+        //renderer.render(new Arrow());
         panel.repaint();
     }
 }

@@ -6,11 +6,11 @@ import transforms.Point3D;
 public class Arrow extends Solid{
 
     public Arrow(){
-        vertexBuffer.add(new Vertex(new Point3D(100, 300, 0), new Col(0xff0000)));
-        vertexBuffer.add(new Vertex(new Point3D(250, 300, 0), new Col(0xff0000)));
-        vertexBuffer.add(new Vertex(new Point3D(250, 100, 0), new Col(0xff0000)));
-        vertexBuffer.add(new Vertex(new Point3D(250, 400, 0), new Col(0xff0000)));
-        vertexBuffer.add(new Vertex(new Point3D(450, 300, 0), new Col(0xff0000)));
+        vertexBuffer.add(new Vertex(new Point3D(100, 300, 0.1), new Col(0xff0000)));
+        vertexBuffer.add(new Vertex(new Point3D(250, 300, 0.1), new Col(0xff0000)));
+        vertexBuffer.add(new Vertex(new Point3D(250, 200, 0.1), new Col(0xff0000)));
+        vertexBuffer.add(new Vertex(new Point3D(250, 400, 0.1), new Col(0xff0000)));
+        vertexBuffer.add(new Vertex(new Point3D(450, 300, 0.1), new Col(0xff0000)));
         indexBuffer.add(0);
         indexBuffer.add(1);
         indexBuffer.add(2);
