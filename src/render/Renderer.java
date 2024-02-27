@@ -5,6 +5,8 @@ import solid.Part;
 import solid.Solid;
 import solid.Vertex;
 import transforms.Col;
+
+import java.awt.*;
 import java.util.List;
 
 public class Renderer {
@@ -47,7 +49,7 @@ public class Renderer {
                         Vertex b = solid.getVertexBuffer().get(solid.getIndexBuffer().get(indexB));
                         Vertex c = solid.getVertexBuffer().get(solid.getIndexBuffer().get(indexC));
 
-                        triangleRasterizer.rasterize(a, b, c, new Col(0xff0000));
+                        triangleRasterizer.rasterize(a, b, c);
                         startIndex+=3;
                     }
                     break;

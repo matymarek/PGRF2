@@ -10,144 +10,54 @@ public class TriangleRasterizer {
         this.zBuffer = zBuffer;
     }
 
-    public void rasterize(
-            Vertex a,
-            Vertex b,
-            Vertex c,
-            Col color
-    ) {
-        int aX = (int) Math.round(a.getPos().getX());
-        int aY = (int) Math.round(a.getPos().getY());
-        double aZ = a.getPos().getZ();
+    public void rasterize(Vertex a, Vertex b, Vertex c) {
 
-        int bX = (int) Math.round(b.getPos().getX());
-        int bY = (int) Math.round(b.getPos().getY());
-        double bZ = b.getPos().getZ();
-
-        int cX = (int) Math.round(c.getPos().getX());
-        int cY = (int) Math.round(c.getPos().getY());
-        double cZ = c.getPos().getZ();
-
-        if (aY > bY) {
-            int tempY = aY;
-            aY = bY;
-            bY = tempY;
-
-            int tempX = aX;
-            aX = bX;
-            bX = tempX;
-
-            double tempZ = aZ;
-            aZ = bZ;
-            bZ = tempZ;
+        if (a.getPos().getY() > b.getPos().getY()) {
+            Vertex temp = a; a = b; b = temp;
+        }
+        if (b.getPos().getY() > c.getPos().getY()) {
+            Vertex temp = b; b = c; c = temp;
+        }
+        if (a.getPos().getY() > b.getPos().getY()) {
+            Vertex temp = a; a = b; b = temp;
         }
 
-        if (bY > cY) {
-            int tempY = bY;
-            bY = cY;
-            cY = tempY;
+        //crop by y
+        for (int y = Math.max(a.getIntY(), 0); y <= Math.min(b.getIntY(), zBuffer.getHeight()-1); y++) {
 
-            int tempX = bX;
-            bX = cX;
-            cX = tempX;
+            double tAB = (y-a.getIntY())/(double)(b.getIntY()-a.getIntY());
+            Vertex AB = a.mul(1-tAB).add(b.mul(tAB));
+            double tAC = (y-a.getIntY())/(double)(c.getIntY()-a.getIntY());
+            Vertex AC = a.mul(1-tAC).add(c.mul(tAC));
 
-            double tempZ = bZ;
-            bZ = cZ;
-            cZ = tempZ;
-        }
-
-        if (aY > bY) {
-            int tempY = aY;
-            aY = bY;
-            bY = tempY;
-
-            int tempX = aX;
-            aX = bX;
-            bX = tempX;
-
-            double tempZ = aZ;
-            aZ = bZ;
-            bZ = tempZ;
-        }
-
-        fillTriangle(aX, aY, aZ, bX, bY, bZ, cX, cY, cZ, color);
-        System.out.println(aX);
-        System.out.println(aY);
-        System.out.println(aZ);
-        System.out.println(cX);
-        System.out.println(cY);
-        System.out.println(cZ);
-        System.out.println(color);
-    }
-
-    private void fillTriangle(int aX, int aY, double aZ, int bX, int bY, double bZ, int cX, int cY, double cZ, Col color) {
-        //ořezání podle Y
-        for (int y = aY; y < bY; y++) {
-            double tAB = getInterpolationCoefficient(y, aY, bY);
-            int xAB = getInterpolatedX(tAB, aX, bX);
-            double zAB = getInterpolatedZ(tAB, aZ, bZ);
-
-            double tAC = getInterpolationCoefficient(y, aY, cY);
-            int xAC = getInterpolatedX(tAC, aX, cX);
-            double zAC = getInterpolatedZ(tAC, aZ, cZ);
-
-            if (xAB > xAC) {
-                int temp = xAB;
-                xAB = xAC;
-                xAC = temp;
-
-                double temp2 = zAB;
-                zAB = zAC;
-                zAC = temp2;
+            if (AB.getIntX() > AC.getIntX()) {
+                Vertex temp = AB; AB = AC; AC = temp;
             }
 
-            //ořezání podle X
-            for (int x = xAB; x < xAC; x++) {
-                double t = getInterpolationCoefficient(x, xAB, xAC);
-                double z = getInterpolatedZ(t, zAB, zAC);
-
-                zBuffer.setPixelWithZTest(x,y,z, color);
+            //crop by x
+            for (int x = Math.max(AB.getIntX(), 0); x <= Math.min(AC.getIntX(), zBuffer.getWidth()-1); x++) {
+                double t = (x-AB.getIntX())/(double)(AC.getIntX()-AB.getIntX());
+                Vertex finalVertex = AB.mul(1-t).add(AC.mul(t));
+                zBuffer.setPixelWithZTest(x,y,finalVertex.getPos().getZ(), finalVertex.getColor());
             }
         }
 
-        for (int y = bY; y < cY; y++) {
-            double tBC = getInterpolationCoefficient(y, bY, cY);
-            int xBC = getInterpolatedX(tBC, bX, cX);
-            double zBC = getInterpolatedZ(tBC, bZ, cZ);
+        for (int y = Math.max(b.getIntY(), 0); y <= Math.min(c.getIntY(), zBuffer.getHeight()-1); y++) {
 
-            double tAC = getInterpolationCoefficient(y, aY, cY);
-            int xAC = getInterpolatedX(tAC, aX, cX);
-            double zAC = getInterpolatedZ(tAC, aZ, cZ);
+            double tBC = (y-b.getIntY())/(double)(c.getIntY()-b.getIntY());
+            Vertex BC = b.mul(1-tBC).add(c.mul(tBC));
+            double tAC = (y-a.getIntY())/(double)(c.getIntY()-a.getIntY());
+            Vertex AC = a.mul(1-tAC).add(c.mul(tAC));
 
-            if (xBC > xAC) {
-                int temp = xBC;
-                xBC = xAC;
-                xAC = temp;
-
-                double temp2 = zBC;
-                zBC = zAC;
-                zAC = temp2;
+            if (BC.getIntX() > AC.getIntX()) {
+                Vertex temp = BC; BC = AC; AC = temp;
             }
 
-            for (int x = xBC; x < xAC; x++) {
-                double t = getInterpolationCoefficient(x, xBC, xAC);
-                double z = getInterpolatedZ(t, zBC, zAC);
-
-                zBuffer.setPixelWithZTest(x,y,z, color);
+            for (int x = Math.max(BC.getIntX(), 0); x < Math.min(AC.getIntX(), zBuffer.getWidth()-1); x++) {
+                double t = (x-BC.getIntX())/(double)(AC.getIntX()-BC.getIntX());
+                Vertex finalVertex = BC.mul(1-t).add(AC.mul(t));
+                zBuffer.setPixelWithZTest(x,y,finalVertex.getPos().getZ(), finalVertex.getColor());
             }
         }
     }
-
-    private double getInterpolationCoefficient(int i, int aI, int bI) {
-        return (i-aI)/(double)(bI-aI);
-    }
-
-    private int getInterpolatedX(double t, int aX, int bX) {
-        return (int) Math.round((1-t) * aX + t * bX);
-    }
-
-    private double getInterpolatedZ(double t, double aZ, double bZ) {
-        return (1-t) * aZ + t * bZ;
-    }
-
 }

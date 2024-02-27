@@ -10,6 +10,7 @@ import transforms.Col;
 import transforms.Point3D;
 import view.Panel;
 
+import java.awt.*;
 import java.awt.event.*;
 
 public class Controller3D implements Controller {
@@ -28,7 +29,7 @@ public class Controller3D implements Controller {
     }
 
     public void initObjects(Raster<Col> raster) {
-        raster.setDefaultValue(new Col(0x101010));
+        raster.setDefaultValue(new Col(Color.black.getRGB()));
         zBuffer = new ZBuffer(raster);
         triangleRasterizer = new TriangleRasterizer(zBuffer);
         renderer = new Renderer(triangleRasterizer);
@@ -47,21 +48,18 @@ public class Controller3D implements Controller {
 
     private void redraw() {
         panel.clear();
-        triangleRasterizer.rasterize(
-                new Vertex(new Point3D(400, 0, 0.5), new Col(0xff0000)),
-                new Vertex(new Point3D(0,300, 0.5), new Col(0xff0000)),
-                new Vertex(new Point3D(799, 599, 0.5), new Col(0xff0000)),
-                new Col(0xff0000)
-        );
+        //triangleRasterizer.rasterize(
+        //        new Vertex(new Point3D(400, -150, 0.5), new Col(Color.red.getRGB())),
+        //        new Vertex(new Point3D(-125,300, 0.5), new Col(Color.pink.getRGB())),
+        //        new Vertex(new Point3D(805, 599, 0.5), new Col(Color.magenta.getRGB()))
+        //);
+        //triangleRasterizer.rasterize(
+        //        new Vertex(new Point3D(500, -100, 0.3), new Col(Color.yellow.getRGB())),
+        //        new Vertex(new Point3D(-50,350, 0.7), new Col(Color.blue.getRGB())),
+        //        new Vertex(new Point3D(400, 700, 0.7), new Col(Color.green.getRGB()))
+        //);
 
-        triangleRasterizer.rasterize(
-                new Vertex(new Point3D(500, 0, 0.3), new Col(0xff0000)),
-                new Vertex(new Point3D(0,350, 0.7), new Col(0xff0000)),
-                new Vertex(new Point3D(400, 599, 0.7), new Col(0xff0000)),
-                new Col(0xff0000)
-        );
-
-        //renderer.render(new Arrow());
+        renderer.render(new Arrow());
         panel.repaint();
     }
 }

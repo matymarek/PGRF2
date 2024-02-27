@@ -17,9 +17,14 @@ public class Vertex implements Vectorizable<Vertex> {
     }
     @Override
     public Vertex add(Vertex v) {
-        return null;
+        return new Vertex(pos.add(v.getPos()), color.add(v.color));
     }
     public Point3D getPos() {
         return pos;
+    }
+    public int getIntX(){return (int) Math.round(pos.getX());}
+    public int getIntY(){return (int) Math.round(pos.getY());}
+    public Col getColor() {
+        return color;
     }
 }
