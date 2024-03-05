@@ -37,4 +37,12 @@ public class Panel extends JPanel {
     public void clear() {
         raster.clear();
     }
+
+    public int getWidth(){
+        return WIDTH;
+    }
+
+    public int getHeight(){
+        return HEIGHT;
+    }
 }
