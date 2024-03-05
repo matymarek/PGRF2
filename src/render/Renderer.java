@@ -175,6 +175,7 @@ public class Renderer {
                 .addPos(new Point3D(1, 1, 0))
                 .mulPos(new Point3D((double) (panel.getWidth() - 1) /2, (double) (panel.getHeight() - 1) /2, 1));
     }
+
     public void setView(Mat4 view) {
         this.view = view;
     }

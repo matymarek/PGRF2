@@ -60,10 +60,10 @@ public class Controller3D implements Controller {
         renderer = new Renderer(triangleRasterizer, lineRasterizer, panel);
 
 
-        Vec3D pos = new Vec3D(1.5, 7, 2);
+        Vec3D pos = new Vec3D(0.3, -4, 2);
         camera = new Camera(pos,
-                Math.toRadians(90),
-                Math.toRadians(15),
+                Math.toRadians(70),
+                Math.toRadians(-15),
                 1, true
         );
         proj = new Mat4PerspRH(
@@ -238,6 +238,9 @@ public class Controller3D implements Controller {
         panel.clear();
         zBuffer.clearDepth();
         renderer.setView(camera.getViewMatrix());
+        System.out.println(camera.getPosition());
+        System.out.println(Math.toDegrees(camera.getAzimuth()));
+        System.out.println(Math.toDegrees(camera.getZenith()));
         renderer.setProj(proj);
         renderer.setCenters(solids);
         centers = renderer.getCenters(solids);
