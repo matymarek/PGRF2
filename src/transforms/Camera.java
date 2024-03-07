@@ -151,14 +151,14 @@ public class Camera {
 
 	/**
 	 * Returns a new camera with zenith summed with the given value. Zenith is
-	 * kept in [-pi/2, pi/2]
+	 * kept in [-pi/2, pi/2] -> Math.max(-Math.PI/2, Math.min(zenith + ang, Math.PI/2))
 	 * 
 	 * @param ang
 	 *            zenith change in radians
 	 * @return new Camera instance
 	 */
 	public Camera addZenith(final double ang) {
-		return new Camera(this, azimuth, Math.max(-Math.PI / 2, Math.min(zenith + ang, Math.PI / 2)));
+		return new Camera(this, azimuth, Math.max(-Math.PI, Math.min(zenith + ang, Math.PI/2)));
 	}
 
 	/**
@@ -333,7 +333,7 @@ public class Camera {
 	 * @return new Camera instance
 	 */
 	public Camera up(final double speed) {
-		return new Camera(this, pos.add(new Vec3D(0, 0, speed)));
+		return new Camera(this, pos.add(new Vec3D(0, speed, 0)));
 	}
 
 	/**

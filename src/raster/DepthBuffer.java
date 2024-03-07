@@ -10,7 +10,7 @@ public class DepthBuffer implements Raster<Double>{
         this.width = width;
         this.height = height;
         this.buffer = new double[width][height];
-        this.defaultValue = 10000;
+        this.defaultValue = 1;
     }
 
     @Override

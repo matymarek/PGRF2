@@ -5,6 +5,7 @@ import raster.Raster;
 import raster.TriangleRasterizer;
 import raster.ZBuffer;
 import render.Renderer;
+import shader.Shader;
 import shader.ShaderInterpolated;
 import solid.*;
 import transforms.*;
@@ -44,27 +45,29 @@ public class Controller3D implements Controller {
     public void initObjects(Raster<Col> raster) {
         raster.setDefaultValue(new Col(Color.black.getRGB()));
         zBuffer = new ZBuffer(raster);
+        try {
+            texture = ImageIO.read(new File("./res/brickwall.jpg"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //vertex.add(1/něco) -> otočení textury
+        triangleRasterizer = new TriangleRasterizer(zBuffer, v -> {
+            // v.getUv().mul(1 / v.getOne())
+            int x = (int) (v.getUv().getX() * texture.getWidth());
+            int y = (int) (v.getUv().getY() * texture.getHeight());
+            return new Col(texture.getRGB(x, y));
+        });
 
-       //try {
-       //    texture = ImageIO.read(new File("./res/brickwall.jpg"));
-       //} catch (IOException e) {
-       //    throw new RuntimeException(e);
-       //}
-        triangleRasterizer = new TriangleRasterizer(zBuffer, new ShaderInterpolated());
-            // vertex.add(1/něco) -> otočení textury
-            //int x = (int) (v.getUv().getX() * texture.getWidth());
-            //int y = (int) (v.getUv().getY() * texture.getHeight());
-            //return new Col(texture.getRGB(x,y));
 
         lineRasterizer = new LineRasterizer(zBuffer);
         renderer = new Renderer(triangleRasterizer, lineRasterizer, panel);
 
 
-        Vec3D pos = new Vec3D(0.3, -4, 2);
+        Vec3D pos = new Vec3D(0, 0, 0);
         camera = new Camera(pos,
-                Math.toRadians(70),
-                Math.toRadians(-15),
-                1, true
+                Math.toRadians(90),
+                Math.toRadians(-100),
+                1, false
         );
         proj = new Mat4PerspRH(
                 Math.PI/4,
@@ -74,11 +77,13 @@ public class Controller3D implements Controller {
         solids = new ArrayList<>();
         Cube cube = new Cube();
         Triangl triangl = new Triangl();
+        CubicTriangl cubicTriangl = new CubicTriangl();
         AxisX axisX = new AxisX();
         AxisY axisY = new AxisY();
         AxisZ axisZ = new AxisZ();
         solids.add(cube);
         solids.add(triangl);
+        solids.add(cubicTriangl);
         solids.add(axisX);
         solids.add(axisY);
         solids.add(axisZ);
@@ -99,27 +104,27 @@ public class Controller3D implements Controller {
             public void keyPressed(KeyEvent e){
                 if(e.getKeyCode() == KeyEvent.VK_A){
                     //camera move left
-                    camera = camera.left(0.2);
+                    camera = camera.left(0.05);
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_D) {
                     //camera move right
-                    camera = camera.right(0.2);
+                    camera = camera.right(0.05);
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_W) {
                     //camera move up
-                    camera = camera.up(0.2);
+                    camera = camera.up(0.05);
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_S) {
                     //camera move down
-                    camera = camera.down(0.2);
+                    camera = camera.down(0.05);
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_Q) {
                     //camera zoom in
-                    camera = camera.forward(0.2);
+                    camera = camera.forward(0.05);
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_E) {
                     //camera zoom out
-                    camera = camera.backward(0.2);
+                    camera = camera.backward(0.05);
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_T) {
                     //camera rotate over
@@ -139,27 +144,27 @@ public class Controller3D implements Controller {
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_I) {
                     //solid move up
-                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(0, 0, 0.2)));
+                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(0, 0.05, 0)));
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_J) {
                     //solid move left
-                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(-0.2, 0, 0)));
-                }
-                else if (e.getKeyCode() == KeyEvent.VK_K) {
-                    //solid move down
-                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(0, 0, -0.2)));
+                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(-0.05, 0, 0)));
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_L) {
                     //solid move right
-                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(0.2, 0, 0)));
+                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(0.05, 0, 0)));
+                }
+                else if (e.getKeyCode() == KeyEvent.VK_K) {
+                    //solid move down
+                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(0, -0.05, 0)));
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_U) {
                     //solid move forward
-                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(0, -0.2, 0)));
+                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(0, 0, 0.05)));
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_O) {
                     //solid move backward
-                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(0, 0.2, 0)));
+                    solids.get(selectedSolidIndex).setModel(solids.get(selectedSolidIndex).getModel().mul(new Mat4Transl(0, 0, -0.05)));
                 }
                 else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
                     //rotation Y left
@@ -238,9 +243,8 @@ public class Controller3D implements Controller {
         panel.clear();
         zBuffer.clearDepth();
         renderer.setView(camera.getViewMatrix());
-        System.out.println(camera.getPosition());
-        System.out.println(Math.toDegrees(camera.getAzimuth()));
-        System.out.println(Math.toDegrees(camera.getZenith()));
+        //System.out.println(camera.getAzimuth());
+        //System.out.println(camera.getZenith());
         renderer.setProj(proj);
         renderer.setCenters(solids);
         centers = renderer.getCenters(solids);

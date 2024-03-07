@@ -17,12 +17,10 @@ public class TriangleRasterizer {
         this.lerp = new Lerp<>();
     }
 
-    public void rasterize(Vertex v1, Vertex v2, Vertex v3) {
-
-        v1 = v1.mul(1 / v1.getW());
-        v2 = v2.mul(1 / v2.getW());
-        v3 = v3.mul(1 / v3.getW());
-
+    public void rasterize(Vertex v1, Vertex v2, Vertex v3, boolean withTexture) {
+        v1 = new Vertex(new Point3D(v1.getPos().dehomog().get()), v1.getColor(), v1.getUv());
+        v2 = new Vertex(new Point3D(v2.getPos().dehomog().get()), v2.getColor(), v2.getUv());
+        v3 = new Vertex(new Point3D(v3.getPos().dehomog().get()), v3.getColor(), v3.getUv());
 
         Vertex a = transformToWindow(v1);
         Vertex b = transformToWindow(v2);
@@ -55,7 +53,8 @@ public class TriangleRasterizer {
             for (int x = Math.max(AB.getIntX(), 0); x <= Math.min(AC.getIntX(), zBuffer.getWidth()-1); x++) {
                 double t = (x-AB.getIntX())/(double)(AC.getIntX()-AB.getIntX());
                 Vertex finalVertex = lerp.lerp(AB, AC, t);
-                zBuffer.setPixelWithZTest(x,y,finalVertex.getPos().getZ(), shader.getColor(finalVertex));
+                if(withTexture) zBuffer.setPixelWithZTest(x,y,finalVertex.getPos().getZ(), shader.getColor(finalVertex));
+                else zBuffer.setPixelWithZTest(x,y,finalVertex.getPos().getZ(), finalVertex.getColor());
             }
         }
 
@@ -73,7 +72,8 @@ public class TriangleRasterizer {
             for (int x = Math.max(BC.getIntX(), 0); x < Math.min(AC.getIntX(), zBuffer.getWidth()-1); x++) {
                 double t = (x-BC.getIntX())/(double)(AC.getIntX()-BC.getIntX());
                 Vertex finalVertex = lerp.lerp(BC, AC, t);
-                zBuffer.setPixelWithZTest(x,y,finalVertex.getPos().getZ(), shader.getColor(finalVertex));
+                if(withTexture) zBuffer.setPixelWithZTest(x,y,finalVertex.getPos().getZ(), shader.getColor(finalVertex));
+                else zBuffer.setPixelWithZTest(x,y,finalVertex.getPos().getZ(), finalVertex.getColor());
             }
         }
     }

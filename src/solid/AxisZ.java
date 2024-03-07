@@ -9,11 +9,11 @@ import java.awt.*;
 public class AxisZ extends Solid{
     public AxisZ(){
         axis = true;
-        vertexBuffer.add(new Vertex(new Point3D(0, 0, -1), new Col(Color.blue.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0, 0, 3), new Col(Color.blue.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0, 0.5, 3), new Col(Color.blue.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0, -0.5, 3), new Col(Color.blue.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0, 0, 3.5), new Col(Color.blue.getRGB()), new Vec2D()));
+        vertexBuffer.add(new Vertex(new Point3D(0, 0, -0.1), new Col(Color.blue.getRGB()), new Vec2D()));
+        vertexBuffer.add(new Vertex(new Point3D(0, 0, 0.5), new Col(Color.blue.getRGB()), new Vec2D()));
+        vertexBuffer.add(new Vertex(new Point3D(0.05, 0, 0.5), new Col(Color.blue.getRGB()), new Vec2D()));
+        vertexBuffer.add(new Vertex(new Point3D(-0.05, 0, 0.5), new Col(Color.blue.getRGB()), new Vec2D()));
+        vertexBuffer.add(new Vertex(new Point3D(0, 0, 0.6), new Col(Color.blue.getRGB()), new Vec2D()));
         indexBuffer.add(0);
         indexBuffer.add(1);
         indexBuffer.add(2);

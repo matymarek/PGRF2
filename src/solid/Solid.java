@@ -9,6 +9,7 @@ public abstract class Solid {
     protected final ArrayList<Integer> indexBuffer = new ArrayList<>();
     protected final ArrayList<Part> partBuffer = new ArrayList<>();
     protected boolean axis;
+    protected boolean texture;
     private Vertex center;
     private Mat4 model = new Mat4Identity();
 
@@ -28,6 +29,7 @@ public abstract class Solid {
         return model;
     }
     public boolean isAxis() { return axis; }
+    public boolean withTexture() { return texture; }
     public Vertex getCenter() {
         return center;
     }

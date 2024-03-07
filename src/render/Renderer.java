@@ -66,20 +66,22 @@ public class Renderer {
                         Vertex a = solid.getVertexBuffer().get(solid.getIndexBuffer().get(startIndex));
                         Vertex b = solid.getVertexBuffer().get(solid.getIndexBuffer().get(startIndex+1));
                         Vertex c = solid.getVertexBuffer().get(solid.getIndexBuffer().get(startIndex+2));
-                        if(!solid.isAxis()) {
-                            a = new Vertex(a.getPos().mul(solid.getModel()).mul(view).mul(proj), a.getColor(), a.getUv());
-                            b = new Vertex(b.getPos().mul(solid.getModel()).mul(view).mul(proj), b.getColor(), b.getUv());
-                            c = new Vertex(c.getPos().mul(solid.getModel()).mul(view).mul(proj), c.getColor(), c.getUv());
-                        }
-                        else {
+                        if(solid.isAxis()) {
                             a = new Vertex(a.getPos().mul(view).mul(proj), a.getColor(), a.getUv());
                             b = new Vertex(b.getPos().mul(view).mul(proj), b.getColor(), b.getUv());
                             c = new Vertex(c.getPos().mul(view).mul(proj), c.getColor(), c.getUv());
                         }
-
-
-
-                        clipTriangle(a, b, c);
+                        //else if(solid.withTexture()){
+                        //    a = new Vertex(a.getPos().mul(solid.getModel()).mul(view).mul(proj), a.getColor(), a.getUv());
+                        //    b = new Vertex(b.getPos().mul(solid.getModel()).mul(view).mul(proj), b.getColor(), b.getUv());
+                        //    c = new Vertex(c.getPos().mul(solid.getModel()).mul(view).mul(proj), c.getColor(), c.getUv());
+                        //}
+                        else {
+                            a = new Vertex(a.getPos().mul(solid.getModel()).mul(view).mul(proj), a.getColor(), a.getUv());
+                            b = new Vertex(b.getPos().mul(solid.getModel()).mul(view).mul(proj), b.getColor(), b.getUv());
+                            c = new Vertex(c.getPos().mul(solid.getModel()).mul(view).mul(proj), c.getColor(), c.getUv());
+                        }
+                        clipTriangle(a, b, c, solid.withTexture());
                         startIndex+=3;
                     }
                     break;
@@ -95,7 +97,7 @@ public class Renderer {
         }
     }
 
-    private void clipTriangle(Vertex a, Vertex b, Vertex c){
+    private void clipTriangle(Vertex a, Vertex b, Vertex c, boolean withTexture){
         //TODO: fast clip
 
         if (a.getPos().getZ() < b.getPos().getZ()) {
@@ -115,7 +117,7 @@ public class Renderer {
             Vertex v1 = lerp.lerp(a, b, tAB);
             double tAC = (zMin-a.getPos().getZ()/(c.getPos().getZ()-a.getPos().getZ()));
             Vertex v2 = lerp.lerp(a, c, tAC);
-            triangleRasterizer.rasterize(v1, v2, c);
+            triangleRasterizer.rasterize(v1, v2, c, withTexture);
             return;
         }
         if(c.getPos().getZ() < zMin){
@@ -125,12 +127,12 @@ public class Renderer {
             double tAC = (zMin-a.getPos().getZ()/(c.getPos().getZ()-a.getPos().getZ()));
             Vertex v2 = lerp.lerp(a, c, tAC);
 
-            triangleRasterizer.rasterize(a, b, v1);
-            triangleRasterizer.rasterize(a, v1, v2);
+            triangleRasterizer.rasterize(a, b, v1, withTexture);
+            triangleRasterizer.rasterize(a, v1, v2, withTexture);
             return;
 
         }
-        triangleRasterizer.rasterize(a, b, c);
+        triangleRasterizer.rasterize(a, b, c, withTexture);
     }
 
     private void clipLine(Vertex a, Vertex b){
