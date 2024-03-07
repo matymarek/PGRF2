@@ -37,10 +37,10 @@ public class Renderer {
             Mat4 mat = solid.getModel().mul(view).mul(proj);
             switch (part.getType()){
                 case POINTS:
-                    for(int i = 0; i < part.getCount(); i++) {
-                        Vertex a = solid.getVertexBuffer().get(solid.getIndexBuffer().get(part.getStart()));
+                    //for(int i = 0; i < part.getCount(); i++) {
+                        //Vertex a = solid.getVertexBuffer().get(solid.getIndexBuffer().get(part.getStart()));
                         //rasterize somehow
-                    }
+                    //}
                     break;
                 case LINES:
                     startIndex = part.getStart();
@@ -95,6 +95,15 @@ public class Renderer {
 
     private void clipTriangle(Vertex a, Vertex b, Vertex c, boolean withTexture){
 
+        if ((!((-a.getW()) <= a.getIntX() && a.getIntX() <= a.getW())
+                || !((-a.getW()) <= a.getIntY() && a.getIntY() <= a.getW())
+                || !(0 <= a.getPos().getZ() && a.getPos().getZ() <= a.getW()))
+                || (!((-b.getW()) <= b.getIntX() && b.getIntX() <= b.getW())
+                || !((-b.getW()) <= b.getIntY() && b.getIntY() <= b.getW())
+                || !(0 <= b.getPos().getZ() && b.getPos().getZ() <= b.getW()))
+                || (!((-c.getW()) <= c.getIntX() && c.getIntX() <= c.getW())
+                || !((-c.getW()) <= c.getIntY() && c.getIntY() <= b.getW())
+                || !(0 <= c.getPos().getZ() && c.getPos().getZ() <= c.getW()))) { return; }
         if (a.getPos().getZ() < b.getPos().getZ()) {
             Vertex temp = a; a = b; b = temp;
         }
@@ -104,7 +113,6 @@ public class Renderer {
         if (a.getPos().getZ() < b.getPos().getZ()) {
             Vertex temp = a; a = b; b = temp;
         }
-
         double zMin = 0;
         if (a.getPos().getZ() < zMin) return;
         if (b.getPos().getZ() < zMin) {
@@ -118,19 +126,22 @@ public class Renderer {
         if(c.getPos().getZ() < zMin){
             double tBC = (zMin-b.getPos().getZ()/(c.getPos().getZ()-b.getPos().getZ()));
             Vertex v1 = lerp.lerp(b, c, tBC);
-
             double tAC = (zMin-a.getPos().getZ()/(c.getPos().getZ()-a.getPos().getZ()));
             Vertex v2 = lerp.lerp(a, c, tAC);
-
             triangleRasterizer.rasterize(a, b, v1, withTexture);
             triangleRasterizer.rasterize(a, v1, v2, withTexture);
             return;
-
         }
         triangleRasterizer.rasterize(a, b, c, withTexture);
     }
 
     private void clipLine(Vertex a, Vertex b){
+        if ((!((-a.getW()) <= a.getIntX() && a.getIntX() <= a.getW())
+                || !((-a.getW()) <= a.getIntY() && a.getIntY() <= a.getW())
+                || !(0 <= a.getPos().getZ() && a.getPos().getZ() <= a.getW()))
+                || (!((-b.getW()) <= b.getIntX() && b.getIntX() <= b.getW())
+                || !((-b.getW()) <= b.getIntY() && b.getIntY() <= b.getW())
+                || !(0 <= b.getPos().getZ() && b.getPos().getZ() <= b.getW()))) { return; }
         if (a.getPos().getZ() < b.getPos().getZ()) {
             Vertex temp = a; a = b; b = temp;
         }
