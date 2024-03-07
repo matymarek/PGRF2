@@ -9,11 +9,11 @@ import java.awt.*;
 public class AxisX extends Solid{
     public AxisX(){
         axis = true;
-        vertexBuffer.add(new Vertex(new Point3D(-0.1, 0, 0), new Col(Color.red.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0.5, 0, 0), new Col(Color.red.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0.5, 0.05, 0), new Col(Color.red.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0.5, -0.05, 0), new Col(Color.red.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0.6, 0, 0), new Col(Color.red.getRGB()), new Vec2D()));
+        vertexBuffer.add(new Vertex(new Point3D(-0.1, 0, 0), new Col(Color.red.getRGB()), new Vec2D(), 1));
+        vertexBuffer.add(new Vertex(new Point3D(0.5, 0, 0), new Col(Color.red.getRGB()), new Vec2D(), 1));
+        vertexBuffer.add(new Vertex(new Point3D(0.5, 0.05, 0), new Col(Color.red.getRGB()), new Vec2D(), 1));
+        vertexBuffer.add(new Vertex(new Point3D(0.5, -0.05, 0), new Col(Color.red.getRGB()), new Vec2D(), 1));
+        vertexBuffer.add(new Vertex(new Point3D(0.6, 0, 0), new Col(Color.red.getRGB()), new Vec2D(), 1));
         indexBuffer.add(0);
         indexBuffer.add(1);
         indexBuffer.add(2);

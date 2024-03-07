@@ -18,9 +18,9 @@ public class TriangleRasterizer {
     }
 
     public void rasterize(Vertex v1, Vertex v2, Vertex v3, boolean withTexture) {
-        v1 = new Vertex(new Point3D(v1.getPos().dehomog().get()), v1.getColor(), v1.getUv());
-        v2 = new Vertex(new Point3D(v2.getPos().dehomog().get()), v2.getColor(), v2.getUv());
-        v3 = new Vertex(new Point3D(v3.getPos().dehomog().get()), v3.getColor(), v3.getUv());
+        v1 = new Vertex(new Point3D(v1.getPos().dehomog().get()), v1.getColor(), v1.getUv(), v1.getOne());
+        v2 = new Vertex(new Point3D(v2.getPos().dehomog().get()), v2.getColor(), v2.getUv(), v2.getOne());
+        v3 = new Vertex(new Point3D(v3.getPos().dehomog().get()), v3.getColor(), v3.getUv(), v3.getOne());
 
         Vertex a = transformToWindow(v1);
         Vertex b = transformToWindow(v2);

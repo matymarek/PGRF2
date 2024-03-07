@@ -34,6 +34,7 @@ public class Renderer {
     public void render(Solid solid){
         for(Part part : solid.getPartBuffer()){
             int startIndex;
+            Mat4 mat = solid.getModel().mul(view).mul(proj);
             switch (part.getType()){
                 case POINTS:
                     for(int i = 0; i < part.getCount(); i++) {
@@ -47,12 +48,12 @@ public class Renderer {
                         Vertex a = solid.getVertexBuffer().get(solid.getIndexBuffer().get(startIndex));
                         Vertex b = solid.getVertexBuffer().get(solid.getIndexBuffer().get(startIndex+1));
                         if(!solid.isAxis()) {
-                            a = new Vertex(a.getPos().mul(solid.getModel()).mul(view).mul(proj), a.getColor(), a.getUv());
-                            b = new Vertex(b.getPos().mul(solid.getModel()).mul(view).mul(proj), b.getColor(), b.getUv());
+                            a = new Vertex(a.getPos().mul(mat), a.getColor(), a.getUv(), a.getOne());
+                            b = new Vertex(b.getPos().mul(mat), b.getColor(), b.getUv(), b.getOne());
                         }
                         else {
-                            a = new Vertex(a.getPos().mul(view).mul(proj), a.getColor(), a.getUv());
-                            b = new Vertex(b.getPos().mul(view).mul(proj), b.getColor(), b.getUv());
+                            a = new Vertex(a.getPos().mul(view).mul(proj), a.getColor(), a.getUv(), a.getOne());
+                            b = new Vertex(b.getPos().mul(view).mul(proj), b.getColor(), b.getUv(), b.getOne());
                         }
                         clipLine(a, b);
                         startIndex+=2;
@@ -67,19 +68,14 @@ public class Renderer {
                         Vertex b = solid.getVertexBuffer().get(solid.getIndexBuffer().get(startIndex+1));
                         Vertex c = solid.getVertexBuffer().get(solid.getIndexBuffer().get(startIndex+2));
                         if(solid.isAxis()) {
-                            a = new Vertex(a.getPos().mul(view).mul(proj), a.getColor(), a.getUv());
-                            b = new Vertex(b.getPos().mul(view).mul(proj), b.getColor(), b.getUv());
-                            c = new Vertex(c.getPos().mul(view).mul(proj), c.getColor(), c.getUv());
+                            a = new Vertex(a.getPos().mul(view).mul(proj), a.getColor(), a.getUv(), a.getOne());
+                            b = new Vertex(b.getPos().mul(view).mul(proj), b.getColor(), b.getUv(), b.getOne());
+                            c = new Vertex(c.getPos().mul(view).mul(proj), c.getColor(), c.getUv(), c.getOne());
                         }
-                        //else if(solid.withTexture()){
-                        //    a = new Vertex(a.getPos().mul(solid.getModel()).mul(view).mul(proj), a.getColor(), a.getUv());
-                        //    b = new Vertex(b.getPos().mul(solid.getModel()).mul(view).mul(proj), b.getColor(), b.getUv());
-                        //    c = new Vertex(c.getPos().mul(solid.getModel()).mul(view).mul(proj), c.getColor(), c.getUv());
-                        //}
                         else {
-                            a = new Vertex(a.getPos().mul(solid.getModel()).mul(view).mul(proj), a.getColor(), a.getUv());
-                            b = new Vertex(b.getPos().mul(solid.getModel()).mul(view).mul(proj), b.getColor(), b.getUv());
-                            c = new Vertex(c.getPos().mul(solid.getModel()).mul(view).mul(proj), c.getColor(), c.getUv());
+                            a = new Vertex(a.getPos().mul(mat), a.getColor(), a.getUv(), a.getOne());
+                            b = new Vertex(b.getPos().mul(mat), b.getColor(), b.getUv(), b.getOne());
+                            c = new Vertex(c.getPos().mul(mat), c.getColor(), c.getUv(), c.getOne());
                         }
                         clipTriangle(a, b, c, solid.withTexture());
                         startIndex+=3;
@@ -98,7 +94,6 @@ public class Renderer {
     }
 
     private void clipTriangle(Vertex a, Vertex b, Vertex c, boolean withTexture){
-        //TODO: fast clip
 
         if (a.getPos().getZ() < b.getPos().getZ()) {
             Vertex temp = a; a = b; b = temp;
@@ -154,7 +149,7 @@ public class Renderer {
         for(Solid solid : solids){
             if(!solid.isAxis()){
                 Vertex center = solid.getCenter();
-                solid.setCenter(new Vertex(center.getPos().mul(solid.getModel()).mul(view).mul(proj), null, null));
+                solid.setCenter(new Vertex(center.getPos().mul(solid.getModel()).mul(view).mul(proj), null, null, 0));
 
             }
         }
@@ -165,7 +160,7 @@ public class Renderer {
         for(Solid solid : solids){
             if(!solid.isAxis()){
                 if (solid.getCenter().getPos().dehomog().isPresent()){
-                    centers.add(transformToWindow(new Vertex(new Point3D(solid.getCenter().getPos().dehomog().get()), null, null)));
+                    centers.add(transformToWindow(new Vertex(new Point3D(solid.getCenter().getPos().dehomog().get()), null, null, 0)));
                 }
             }
         }

@@ -21,8 +21,8 @@ public class LineRasterizer{
 
 
     public void rasterize(Vertex v1, Vertex v2) {
-        v1 = new Vertex(new Point3D(v1.getPos().dehomog().get()), v1.getColor(), v1.getUv());
-        v2 = new Vertex(new Point3D(v2.getPos().dehomog().get()), v2.getColor(), v2.getUv());
+        v1 = new Vertex(new Point3D(v1.getPos().dehomog().get()), v1.getColor(), v1.getUv(), v1.getOne());
+        v2 = new Vertex(new Point3D(v2.getPos().dehomog().get()), v2.getColor(), v2.getUv(), v2.getOne());
         Vertex a = transformToWindow(v1);
         Vertex b = transformToWindow(v2);
         if (a.getPos().getY() > b.getPos().getY()) {

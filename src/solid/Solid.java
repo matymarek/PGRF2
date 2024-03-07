@@ -62,7 +62,7 @@ public abstract class Solid {
                 (maxX + minX) / 2,
                 (maxY + minY) / 2,
                 (maxZ + minZ) / 2),
-                new Col(), new Vec2D()
+                new Col(), new Vec2D(), 1
         );
     }
 

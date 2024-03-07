@@ -5,8 +5,6 @@ import raster.Raster;
 import raster.TriangleRasterizer;
 import raster.ZBuffer;
 import render.Renderer;
-import shader.Shader;
-import shader.ShaderInterpolated;
 import solid.*;
 import transforms.*;
 import view.Panel;
@@ -50,11 +48,10 @@ public class Controller3D implements Controller {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //vertex.add(1/něco) -> otočení textury
         triangleRasterizer = new TriangleRasterizer(zBuffer, v -> {
-            // v.getUv().mul(1 / v.getOne())
-            int x = (int) (v.getUv().getX() * texture.getWidth());
-            int y = (int) (v.getUv().getY() * texture.getHeight());
+            Vec2D vec = v.getUv().mul(1 / v.getOne());
+            int x = (int) (vec.getX() * texture.getWidth());
+            int y = (int) (vec.getY() * texture.getHeight());
             return new Col(texture.getRGB(x, y));
         });
 

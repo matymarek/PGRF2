@@ -8,15 +8,15 @@ import java.awt.*;
 
 public class Cube extends Solid{
     public Cube() {
-        vertexBuffer.add(new Vertex(new Point3D(0.1, 0, 0.1), new Col(Color.magenta.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0.2, 0, 0.1), new Col(Color.blue.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0.2, 0, 0.2), new Col(Color.red.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0.1, 0, 0.2), new Col(Color.pink.getRGB()), new Vec2D()));
+        vertexBuffer.add(new Vertex(new Point3D(0.1, 0, 0.1), new Col(Color.magenta.getRGB()), new Vec2D(), 1));
+        vertexBuffer.add(new Vertex(new Point3D(0.2, 0, 0.1), new Col(Color.blue.getRGB()), new Vec2D(), 1));
+        vertexBuffer.add(new Vertex(new Point3D(0.2, 0, 0.2), new Col(Color.red.getRGB()), new Vec2D(), 1));
+        vertexBuffer.add(new Vertex(new Point3D(0.1, 0, 0.2), new Col(Color.pink.getRGB()), new Vec2D(), 1));
 
-        vertexBuffer.add(new Vertex(new Point3D(0.1, 0.1, 0.1), new Col(Color.yellow.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0.2, 0.1, 0.1), new Col(Color.green.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0.2, 0.1, 0.2), new Col(Color.cyan.getRGB()), new Vec2D()));
-        vertexBuffer.add(new Vertex(new Point3D(0.1, 0.1, 0.2), new Col(Color.orange.getRGB()), new Vec2D()));
+        vertexBuffer.add(new Vertex(new Point3D(0.1, 0.1, 0.1), new Col(Color.yellow.getRGB()), new Vec2D(), 1));
+        vertexBuffer.add(new Vertex(new Point3D(0.2, 0.1, 0.1), new Col(Color.green.getRGB()), new Vec2D(), 1));
+        vertexBuffer.add(new Vertex(new Point3D(0.2, 0.1, 0.2), new Col(Color.cyan.getRGB()), new Vec2D(), 1));
+        vertexBuffer.add(new Vertex(new Point3D(0.1, 0.1, 0.2), new Col(Color.orange.getRGB()), new Vec2D(), 1));
         //základna dole
         indexBuffer.add(0);
         indexBuffer.add(1);
