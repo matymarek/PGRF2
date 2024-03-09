@@ -1,6 +1,7 @@
 package view;
 
 import raster.ImageBuffer;
+import transforms.Col;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +27,7 @@ public class Panel extends JPanel {
             return;
 
         ImageBuffer newRaster = new ImageBuffer(this.getWidth(), this.getHeight());
+        newRaster.setDefaultValue(new Col(Color.black.getRGB()));
         newRaster.draw(raster);
         raster = newRaster;
     }
