@@ -240,8 +240,8 @@ public class Controller3D implements Controller {
         panel.clear();
         zBuffer.clearDepth();
         renderer.setView(camera.getViewMatrix());
-        //System.out.println(camera.getAzimuth());
-        //System.out.println(camera.getZenith());
+        System.out.println("Azimuth: "+Math.toDegrees(camera.getAzimuth()));
+        System.out.println("Zenith: "+Math.toDegrees(camera.getZenith()));
         renderer.setProj(proj);
         renderer.setCenters(solids);
         centers = renderer.getCenters(solids);
